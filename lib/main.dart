@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'theme/appt_theme.dart';
+import 'package:jamflex/onboarding_screen.dart';
+import 'theme/app_theme.dart';
 import 'settings_controller.dart';
-import 'onboarding_screen.dart';
 import 'settings_screen.dart';
-import 'screens/home_screen.dart';
-import 'screens/messages_screen.dart';
-import 'screens/sos_screen.dart';
-import 'screens/peers_screen.dart';
+import 'screen/home_screen.dart';
+import 'screen/messages_screen.dart';
+import 'screen/sos_screen.dart';
+import 'screen/peers_screen.dart';
 
 void main() => runApp(const JamFlexApp());
 
-class JamFlexApp extends StateLessWidget {
+class JamFlexApp extends StatefulWidget {
     const JamFlexApp({super.key});
 
     @override
@@ -23,31 +23,32 @@ class _JamFlexAppState extends State<JamFlexApp> {
 
   @override
   void dispose(){
-    _settings.dispose();
+    _settingsController.dispose();
     super.dispose();
   }
 
 @override
 Widget build(BuildContext context){
-  return SettingsScope(
-    controller: _settings,
+  return MaterialApp(
+    controller: _settingsController,
     child: AnimatedBuilder(
-      animation: _settings,
+      animation: _settingsController,
       builder: (context, _) {
         return MaterialApp(
           title: 'JamFlex',
           debugShowCheckedModeBanner: false,
-          theme: _settings.highContrast ? AppTheme.highContrast : AppTheme.dark,
+          theme: AppTheme.lightTheme,
+          themeMode: ThemeMode.system,
           builder: (context, child) {
             //Global text scaling driven by the accessibility settings
             // (settingscontroller.settings.textScaleFactor already clamps 0.85-1.4).
             final mq = MediaQuery.of(context);
             return MediaQuery(
-              data: mq.copyWith(textScaler: TextScaler.linear(_settings.textScaleFactor)),
+              data: mq.copyWith(textScaler: TextScaler.linear(SettingsController().textScaleFactor)),
               child: child!,
             );
           }
-          home: _onboarded
+          home: _onboarded 
               ? const RootShell()
               : OnboardingScreen(onDone: () => setState(() => _onboarded = true)),
         );   
@@ -109,8 +110,8 @@ class _RootShellState extends State<RootShell> {
     )
     : null,
     bottomNavigationBar: NavigationBar(
-      selectedIndex: _index,
-      onDestinationSelected: (i) => setState(() => _index = i),
+      selectedIndex: int.fromEnvironment(EnumName),
+      onDestinationSelected: (i) => setState(() => int.fromEnvironment(name) = i),
       destinations: List.generate(_titles.length, (i) {
         const icons = [Icons.hub_outlined, Icons.chat_bubble_outline, Icons.warning_amber_outlined, Icons.people_outline];
         return NavigationDestination(
