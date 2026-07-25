@@ -87,3 +87,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+dependency_overrides:
+  flutter_localizations:
+    sdk: flutter
+
+    flutter_blue_plus: ^1.35.5
