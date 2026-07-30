@@ -5,6 +5,7 @@ import 'screen/home_screen.dart';
 import 'screen/messages_screen.dart';
 import 'screen/peers_screen.dart'; 
 import 'screen/sos_screen.dart';
+import 'services/mesh_service.dart';
 import 'screen/settings_screen.dart';
 
 void main() {
@@ -34,13 +35,34 @@ class RootNavigation extends StatefulWidget {
 
 class _RootNavigationState extends State<RootNavigation> {
   int _selectedIndex = 0;
+  final MeshService _meshService = MeshService();
+  bool _isStarted = false;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    PeersScreen(),
-    MessagesScreen(),
-    SosScreen(),
-    SettingsScreen(),
+  @override
+  void initState() {
+    super.initState();
+    _startMesh();
+  }
+
+  Future<void> _startMesh() async {
+    await _meshService.start('User_${DateTime.now().millisecondsSinceEpoch % 1000}');
+    setState(() {
+      _isStarted = true;
+    });
+  }
+
+  @override
+  void dispose() {
+    _meshService.stop();
+    super.dispose();
+  }
+
+  List<Widget> get _widgetOptions => <Widget>[
+    const HomeScreen(),
+    PeersScreen(meshService: _meshService),
+    MessagesScreen(meshService: _meshService),
+    SosScreen(meshService: _meshService),
+    const SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -51,6 +73,11 @@ class _RootNavigationState extends State<RootNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_isStarted){
+      return const Scaffold(
+        body: Center (child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),

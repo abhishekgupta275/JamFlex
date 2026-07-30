@@ -12,9 +12,9 @@ class MeshService {
 
   Function(Map<String, dynamic> message)? onMessageReceived;
   Function(String endpointId, String name)? onPeerUpdated;
-  Function(String endpointId)? onPeersRemoved;
+  Function(String endpointId)? onPeerRemoved;
 
-  Function<void> start(String userName) async {
+  Future<void> start(String userName) async {
     _bluetooth.onPeerFound = (id,name) {
       peers[id] = name;
       onPeerUpdated?.call(id, name);

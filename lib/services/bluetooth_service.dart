@@ -11,18 +11,18 @@ final Map<String, String> connectedEndpoints = {};
 
 Function(String endpointId, String name)? onPeerFound;
 Function(String endpointId)? onPeerLost;
-Function(String endpoitnId, String name)? onPeerConnected;
+Function(String endpointId, String name)? onPeerConnected;
 Function(String endpointId)? onPeerDisconnected;
 Function(String endpointId, String message)? onMessageReceived;
 
 Future <void> startAdvertising(String userName) async{
-  await _nearby.startAdevrtising(
+  await _nearby.startAdvertising(
     userName, 
-    Stategy.P2P_CLUSTER,
+    Strategy.P2P_CLUSTER,
     onConnectionInitiated: _onConnectionInitiated,
     onConnectionResult: (id, status){
       if (status == Status.CONNECTED){
-        onPeerConnected?.call(id, connectedEndpoints[id] ? id);
+        onPeerConnected?.call(id, connectedEndpoints[id] ?? id);
       }
     },
     onDisconnected: (id) {
@@ -42,9 +42,11 @@ Future<void> startDiscovery(String userName) async{
       onPeerFound?.call(id, name);
     },
     
-    onEndpointLost: (id) {
-      if (id != null) onPeerLost?.call(id);
-    },
+    onEndpointLost: (String? id) {
+      if (id != null){
+      onPeerLost?.call(id);
+    }
+  },
     serviceId: _serviceId,
   );
 }
@@ -54,7 +56,7 @@ Future<void> connectToPeer(String endpointId, String userName) async {
     userName,
     endpointId,
     onConnectionInitiated: _onConnectionInitiated,
-    onConnectionResults: (id, status) {
+    onConnectionResult: (id, status) {
       if (status == Status.CONNECTED) {
         onPeerConnected?.call(id, connectedEndpoints[id] ?? id);
       }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import '..theme/app_theme.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
   @override
@@ -45,7 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen>{
           ),
           SwitchListTile(
             title: const Text('Notifications'),
-            subtitle: const Text('Get notified about new messages and peers')
+            subtitle: const Text('Get notified about new messages and peers'),
             value: _notificationsEnabled,
             onChanged: (bool value) {
               setState(() {
@@ -53,11 +51,11 @@ class _SettingsScreenState extends State<SettingsScreen>{
               });
             },
           ),
-          const Divider();
+          const Divider(),
           ListTile(
-            leading: const Icon(Icons_info_outline),
+            leading: const Icon(Icons.info_outline),
             title: const Text('About: JamFlex'),
-            subtitle: const Text('Version 1.0.0')
+            subtitle: const Text('Version 1.0.0'),
             onTap: () {
               showAboutDialog(
                 context: context,

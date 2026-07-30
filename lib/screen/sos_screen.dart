@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import '../services/mesh_service.dart';
 
 class SosScreen extends StatelessWidget {
-  const SosScreen({super.key});
+  final MeshService meshService;
+
+  const SosScreen({super.key, required this.meshService});
 
   @override
   Widget build(BuildContext context) {

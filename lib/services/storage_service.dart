@@ -2,7 +2,7 @@ import "dart:convert";
 import "package:shared_preferences/shared_preferences.dart";
 
 class StorageService{
-  static const String _messageskey = 'jamdlex_messages';
+  static const String _messagesKey = 'jamdlex_messages';
   static const String _peersKey = 'jamflex_peers';
 
   Future<void> saveMessages (List<Map<String, dynamic>> messages) async {
@@ -14,7 +14,7 @@ class StorageService{
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_messagesKey);
     if (raw == null) return [];
-    final decode = jsonDecode(raw) as List<dynamic>;
+    final decoded = jsonDecode(raw) as List<dynamic>;
     return decoded.cast<Map<String, dynamic>>();
   }
 
