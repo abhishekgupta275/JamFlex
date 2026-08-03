@@ -51,6 +51,7 @@ Future<void> startDiscovery(String userName) async{
   );
 }
 
+
 Future<void> connectToPeer(String endpointId, String userName) async {
   await _nearby.requestConnection(
     userName,

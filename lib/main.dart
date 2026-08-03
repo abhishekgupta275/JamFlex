@@ -45,11 +45,19 @@ class _RootNavigationState extends State<RootNavigation> {
   }
 
   Future<void> _startMesh() async {
-    await _meshService.start('User_${DateTime.now().millisecondsSinceEpoch % 1000}');
-    setState(() {
-      _isStarted = true;
-    });
+    try{
+      await _meshService.start('User_${DateTime.now().millisecondsSinceEpoch}');
+    } catch (e) {
+      debugPrint("Mesh Service error: $e");
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isStarted = true;
+        });
+      }
+    }
   }
+
 
   @override
   void dispose() {
@@ -83,6 +91,8 @@ class _RootNavigationState extends State<RootNavigation> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        unselectedItemColor: Colors.grey,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
