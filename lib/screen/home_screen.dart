@@ -14,13 +14,13 @@ class HomeScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child:: const Text('Cancel', stlye: TextStyle(color: Colors.grey)),
+              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
             
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: (){
-                Navigation.pop(context);
+                Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Broadcasting emergency signal to nearby peers!'),
@@ -34,6 +34,7 @@ class HomeScreen extends StatelessWidget {
       ),
     );
    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +54,13 @@ class HomeScreen extends StatelessWidget {
               children: [
                 _buildBadge(Icons.bluetooth, 'Bluetooth Mesh', Colors.blue),
                 const SizedBox(width: 12),
-                _buildBadge(Icons.wifi_thethering, 'Wi-fi Direct', Colors.lightGreenAccent),
+                _buildBadge(Icons.wifi_tethering, 'Wi-fi Direct', Colors.green),
               ],
             ),
             const SizedBox(height: 40),
 
             GestureDetector(
-              onTap: () => _triggerEmergencyCall(context),
+              onTap: () => _triggerEmergency(context),
               child: Container(
                 width: 200,
                 height: 200,
@@ -84,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Emergency Call',
+                      'EMERGENCY\nCALL',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
@@ -97,8 +98,31 @@ class HomeScreen extends StatelessWidget {
                 ),
               ) ,
             ),
-          ]
-        )
-      )
-        
+            const SizedBox(height: 40),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _buildBadge(IconData icon, String label, Color color) {
+    return Container(
+      padding : const EdgeInsets.symmetric(horizontal:12 , vertical:6),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular (20),
+        border: Border.all(color: color.withOpacity(0.4)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: color),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 12),    
+          ),
+        ],
+      ),
+    );
+  }
 }
