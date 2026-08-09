@@ -57,14 +57,14 @@ Widget _buildToggleButtons() {
     },
     borderRadius: BorderRadius.circular(20),
     selectedColor: Colors.white,
-    fillColor: _selectedCategory == 0 ? _selectedCategory == 1 ? Colors.blue : Colors.orange,
-    constraints: const BoxConstraints(minWidth: 140, minHeight: 40),\
+    fillColor: _selectedCategory == 0 ? Colors.blue : Colors.orange,
+    constraints: const BoxConstraints(minWidth: 140, minHeight: 40),
     children: const [
       Row(
         children: [
           Icon(Icons.lock_outline, size: 18),
           SizedBox(width: 6),
-          Text('Private', style: TextStyle(fontWeight: fontWeight.bold)),
+          Text('Private', style: TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
       Row(
@@ -79,7 +79,7 @@ Widget _buildToggleButtons() {
   );
 }
 
-Widget _buildCoontactList() {
+Widget _buildContactList() {
   
   final filteredContacts = _contacts.where((contact) {
     if (_selectedCategory == 0) {
@@ -87,7 +87,7 @@ Widget _buildCoontactList() {
     } else {
       return contact['isKnown'] == false;
     }
-  });.toList();
+  }).toList();
 
 if(filteredContacts.isEmpty) {
   return Center(
@@ -102,9 +102,54 @@ if(filteredContacts.isEmpty) {
 return ListView.separated(
   padding: const EdgeInsets.symmetric(vertical: 8),
   itemCount: filteredContacts.length,
-  seperatorBuilder: (context, index) => const Divider(height: 1),
+  separatorBuilder: (context, index) => const Divider(height: 1),
   itemBuilder: (context, index) {
 
     final contact = filteredContacts[index];
-    
-)
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: contact['isKnown'] ? Colors.blue.shade100 : Colors.orange.shade100,
+        child: Icon(
+          contact['isKnown'] ? Icons.person : Icons.devices_other,
+          color: contact['isKnown'] ? Colors.blue : Colors.orange,
+        ),
+      ),
+      title: Text(
+        contact['name'],
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 2),
+          Text(
+            contact['lastMessage'],
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(color: Colors.black87),
+          ),
+          const SizedBox(height: 4),
+
+          Row(
+            children: [
+              const Icon(Icons.info_outline, size:12, color: Colors.grey),
+              const SizedBox(width: 4),
+              Text(
+                contact['deviceDetails'],
+                style: const TextStyle(fontSize: 11, color: Colors.grey),
+              ),
+            ],
+          ),
+        ],
+      ),
+      trailing: const Icon(Icons.chevron_right, size:20),
+      onTap: (){
+
+
+        },
+       );
+      },
+    );
+  }
+}
+
